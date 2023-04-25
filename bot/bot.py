@@ -109,7 +109,7 @@ async def start_handle(update: Update, context: CallbackContext):
     
     reply_text += HELP_MESSAGE
     
-    reply_text += "\n\n<b>A message from my creator:</b>\nHi Bubblegum ko! 💕 \nHappy anniversary! 💕🥺 First of all, I want to say thank you for the love, care, and support. 💕 I've always appreciated it whenever I feel that from you. You've helped me during some tough times, and I hope I've done the same for you. 🥺 Thank you for your company and for making me smile and laugh. Thank you for the corny jokes and puns that still make me laugh 😅😆, and thank you for the lablab. 🥺💕\nI never thought I would be with you, and as my friends say, it was a dream come true. 💕 We might have had some conflicts, and our relationship might have started a bit rocky, but we made it through, and every time we grew... Together. 💕\nI'm looking forward to more of Aileen's 'buttiness,' even though sometimes you act a little 'peachy' hahaha.\nI love you, Aileen. Mahal na mahal kita. 🥺💕\n\nI'll end this message to remind you:\nYou're my Euler's identity in a world full of linears. 💕"
+    reply_text += "\n\n<b>A message from my creator:</b>\nHi Bubblegum ko!!\nYou're my Euler's identity in a world full of linears. 💕"
 
     reply_text += "\n\nAnd now... ask me anything! 🤓"
 
