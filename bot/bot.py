@@ -9,6 +9,7 @@ import pydub
 from pathlib import Path
 from datetime import datetime
 
+
 import telegram
 from telegram import (
     Update,
@@ -19,6 +20,7 @@ from telegram import (
 )
 from telegram.ext import (
     Application,
+    Updater,
     ApplicationBuilder,
     CallbackContext,
     CommandHandler,
@@ -32,6 +34,7 @@ from telegram.constants import ParseMode, ChatAction
 import config
 import database
 import openai_utils
+import requests
 
 
 # setup
@@ -41,12 +44,14 @@ logger = logging.getLogger(__name__)
 user_semaphores = {}
 user_tasks = {}
 
+
+
+
 HELP_MESSAGE = """Commands:
 ⚪ /retry – Regenerate last bot answer
 ⚪ /new – Start new dialog
 ⚪ /mode – Select chat mode
 ⚪ /settings – Show settings
-⚪ /balance – Show balance
 ⚪ /help – Show help
 """
 
@@ -99,10 +104,14 @@ async def start_handle(update: Update, context: CallbackContext):
     db.set_user_attribute(user_id, "last_interaction", datetime.now())
     db.start_new_dialog(user_id)
 
-    reply_text = "Hi! I'm <b>ChatGPT</b> bot implemented with GPT-3.5 OpenAI API 🤖\n\n"
-    reply_text += HELP_MESSAGE
+    reply_text = "Hi! I'm <b>MarkJigglyBot</b> an AI bot engineered by Mark De Leon, implemented with GPT-3.5 OpenAI API 🤖\n\n"
 
-    reply_text += "\nAnd now... ask me anything!"
+    
+    reply_text += HELP_MESSAGE
+    
+    reply_text += "\n\n<b>A message from my creator:</b>\nHi Bubblegum ko! 💕 \nHappy anniversary! 💕🥺 First of all, I want to say thank you for the love, care, and support. 💕 I've always appreciated it whenever I feel that from you. You've helped me during some tough times, and I hope I've done the same for you. 🥺 Thank you for your company and for making me smile and laugh. Thank you for the corny jokes and puns that still make me laugh 😅😆, and thank you for the lablab. 🥺💕\nI never thought I would be with you, and as my friends say, it was a dream come true. 💕 We might have had some conflicts, and our relationship might have started a bit rocky, but we made it through, and every time we grew... Together. 💕\nI'm looking forward to more of Aileen's 'buttiness,' even though sometimes you act a little 'peachy' hahaha.\nI love you, Aileen. Mahal na mahal kita. 🥺💕\n\nI'll end this message to remind you:\nYou're my Euler's identity in a world full of linears. 💕"
+
+    reply_text += "\n\nAnd now... ask me anything! 🤓"
 
     await update.message.reply_text(reply_text, parse_mode=ParseMode.HTML)
 
@@ -158,7 +167,7 @@ async def message_handle(update: Update, context: CallbackContext, message=None,
 
         try:
             # send placeholder message to user
-            placeholder_message = await update.message.reply_text("...")
+            placeholder_message = await update.message.reply_text("🤔 MarkJigglyBot is typing...")
 
             # send typing action
             await update.message.chat.send_action(action="typing")
@@ -316,7 +325,7 @@ async def cancel_handle(update: Update, context: CallbackContext):
     await register_user_if_not_exists(update, context, update.message.from_user)
 
     user_id = update.message.from_user.id
-    db.set_user_attribute(user_id, "last_interaction", datetime.now())
+    db.set_user_attribute(user_id, "last_interaction" , datetime.now())
 
     if user_id in user_tasks:
         task = user_tasks[user_id]
@@ -488,6 +497,15 @@ async def post_init(application: Application):
         BotCommand("/help", "Show help message"),
     ])
 
+def send_notification(chat_id):
+    """
+    Sends a notification message to the specified Telegram chat ID.
+    """
+    telegram_bot_token = "YOUR_TELEGRAM_BOT_TOKEN"
+    message = "MarkJigglyBot is up and ready t'werk! 🍑"
+    url = f"https://api.telegram.org/bot{config.telegram_token}/sendMessage?chat_id={chat_id}&text={message}"
+    requests.get(url)
+
 def run_bot() -> None:
     application = (
         ApplicationBuilder()
@@ -497,6 +515,10 @@ def run_bot() -> None:
         .post_init(post_init)
         .build()
     )
+
+    # Add your code to send a message to your Telegram ID here
+    chat_id = "1760111616"
+    send_notification(chat_id)
 
     # add handlers
     user_filter = filters.ALL
@@ -531,3 +553,5 @@ def run_bot() -> None:
 
 if __name__ == "__main__":
     run_bot()
+
+
