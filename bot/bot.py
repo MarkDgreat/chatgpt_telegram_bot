@@ -109,7 +109,7 @@ async def start_handle(update: Update, context: CallbackContext):
     
     reply_text += HELP_MESSAGE
     
-    reply_text += "\n\n<b>A message from my creator:</b>\nHi Bubblegum ko!!\nYou're my Euler's identity in a world full of linears. 💕"
+    reply_text += config.startMessage
 
     reply_text += "\n\nAnd now... ask me anything! 🤓"
 
@@ -497,14 +497,15 @@ async def post_init(application: Application):
         BotCommand("/help", "Show help message"),
     ])
 
-def send_notification(chat_id):
+def send_notification():
     """
     Sends a notification message to the specified Telegram chat ID.
     """
-    telegram_bot_token = "YOUR_TELEGRAM_BOT_TOKEN"
-    message = "MarkJigglyBot is up and ready t'werk! 🍑"
-    url = f"https://api.telegram.org/bot{config.telegram_token}/sendMessage?chat_id={chat_id}&text={message}"
-    requests.get(url)
+    chat_idMulti = config.usersID
+   
+    for i in chat_idMulti:
+        url = f"https://api.telegram.org/bot{config.telegram_token}/sendMessage?chat_id={i}&text={config.deployedMessage}"
+        requests.get(url)
 
 def run_bot() -> None:
     application = (
@@ -517,8 +518,9 @@ def run_bot() -> None:
     )
 
     # Add your code to send a message to your Telegram ID here
-    chat_id = "1760111616"
-    send_notification(chat_id)
+
+
+    send_notification()
 
     # add handlers
     user_filter = filters.ALL
